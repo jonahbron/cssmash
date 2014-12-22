@@ -47,7 +47,7 @@ module.exports = function(input, output, map, complete) {
                 }
             ],
             function(err, results) {
-                complete();
+                typeof(complete) == 'function' && complete();
             }
         );
     });
