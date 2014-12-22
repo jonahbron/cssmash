@@ -3,5 +3,10 @@
   "version": "0.1.0",
   "description": "Mash CSS",
   "author": "Jonah Dahlquist <jonah@nucleussystems.com",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.0.1"
+  },
+  "repository": "git@github.com:jonahbron/cssmash.git"
 }
