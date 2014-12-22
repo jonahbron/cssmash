@@ -19,4 +19,9 @@ describe('#cssmash', function() {
         result.css.should.equal('.a .b { property: value; .dummy } .c {}');
     });
 
+    it('consistently maps classes', function() {
+        var result = cssmash('.test .class { property: value; .dummy } .test {}');
+        result.css.should.equal('.a .b { property: value; .dummy } .a {}');
+    });
+
 });

@@ -24,8 +24,10 @@ module.exports = function(data) {
         parts[parts.length - 1] = parts[parts.length - 1].replace(
             /(?:\.)(-?[_a-z]+[_a-z0-9-]*)/ig,
             function(match, p1) {
-                classMap[p1] = classIncrement.toString(36);
-                classIncrement = nextClass(classIncrement);
+                if (!classMap[p1]) {
+                    classMap[p1] = classIncrement.toString(36);
+                    classIncrement = nextClass(classIncrement);
+                }
                 return '.' + classMap[p1];
             }
         );
