@@ -34,4 +34,19 @@ describe('#cssmash', function() {
         });
     });
 
+    it('ignores classes within curly braces', function(done) {
+        fs.writeFile('test.css', '.test .class { property: value; .dummy } .another_class {}', function(err) {
+            cssmash('test.css', 'test.mash.css', 'test.json', function() {
+                fs.readFile('test.mash.css', 'utf8', function(err, data) {
+                    data.should.equal('.a .b { property: value; .dummy } .c {}');
+
+                    fs.unlinkSync('test.css');
+                    fs.unlinkSync('test.mash.css');
+                    fs.unlinkSync('test.json');
+                    done();
+                });
+            });
+        });
+    });
+
 });
