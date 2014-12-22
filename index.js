@@ -2,6 +2,7 @@
 'use strict';
 
 var fs = require('fs');
+var async = require('async');
 
 function nextClass(i) {
     var className;
@@ -12,7 +13,7 @@ function nextClass(i) {
     return i;
 }
 
-module.exports = function(input, output, map) {
+module.exports = function(input, output, map, complete) {
 
     fs.readFile(input, 'utf8', function(err, data) {
         var classIncrement = 10;
@@ -35,8 +36,20 @@ module.exports = function(input, output, map) {
         }
 
         data = chunks.join('{');
-        fs.writeFile(output, data);
-        fs.writeFile(map, JSON.stringify(classMap));
+
+        async.series(
+            [
+                function(callback) {
+                    fs.writeFile(output, data, callback);
+                },
+                function(callback) {
+                    fs.writeFile(map, JSON.stringify(classMap), callback);
+                }
+            ],
+            function(err, results) {
+                complete();
+            }
+        );
     });
 
 };
