@@ -10,9 +10,11 @@ A simple utility that mashes CSS class names to reduce CSS file size.  It genera
 ## Usage
 
     var cssmash = require('cssmash');
-    cssmash('style.css', 'output.mash.css', 'classmap.json', function() {
-        // Mash complete!
-    });
+
+    var result = cssmash('.css { color: red; }');
+
+    console.log(result.css); // .a { color: red; }
+    console.log(result.map); // {"css":"a"}
 
 ## Testing
 

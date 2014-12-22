@@ -4,49 +4,19 @@ var should = require('chai').should(),
 
 describe('#cssmash', function() {
 
-    it('reduces classes outside of curly brackets', function(done) {
-        fs.writeFile('test.css', '.test .class { property: value; } .another_class {}', function(err) {
-            cssmash('test.css', 'test.mash.css', 'test.json', function() {
-                fs.readFile('test.mash.css', 'utf8', function(err, data) {
-                    data.should.equal('.a .b { property: value; } .c {}');
-
-                    fs.unlinkSync('test.css');
-                    fs.unlinkSync('test.mash.css');
-                    fs.unlinkSync('test.json');
-                    done();
-                });
-            });
-        });
+    it('reduces classes outside of curly brackets', function() {
+        var result = cssmash('.test .class { property: value; } .another_class {}');
+        result.css.should.equal('.a .b { property: value; } .c {}');
     });
 
-    it('generates map file', function(done) {
-        fs.writeFile('test.css', '.test .class { property: value; } .another_class {}', function(err) {
-            cssmash('test.css', 'test.mash.css', 'test.json', function() {
-                fs.readFile('test.json', 'utf8', function(err, data) {
-                    data.should.equal(JSON.stringify({test: 'a', class: 'b', another_class: 'c'}));
-
-                    fs.unlinkSync('test.css');
-                    fs.unlinkSync('test.mash.css');
-                    fs.unlinkSync('test.json');
-                    done();
-                });
-            });
-        });
+    it('generates map', function() {
+        var result = cssmash('.test .class { property: value; } .another_class {}');
+        result.map.should.eql({test: 'a', class: 'b', another_class: 'c'});
     });
 
-    it('ignores classes within curly braces', function(done) {
-        fs.writeFile('test.css', '.test .class { property: value; .dummy } .another_class {}', function(err) {
-            cssmash('test.css', 'test.mash.css', 'test.json', function() {
-                fs.readFile('test.mash.css', 'utf8', function(err, data) {
-                    data.should.equal('.a .b { property: value; .dummy } .c {}');
-
-                    fs.unlinkSync('test.css');
-                    fs.unlinkSync('test.mash.css');
-                    fs.unlinkSync('test.json');
-                    done();
-                });
-            });
-        });
+    it('ignores classes within curly braces', function() {
+        var result = cssmash('.test .class { property: value; .dummy } .another_class {}');
+        result.css.should.equal('.a .b { property: value; .dummy } .c {}');
     });
 
 });
